@@ -1,0 +1,112 @@
+<html>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec4 vNormal;
+
+uniform vec4 lightPosition;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+
+uniform mat4 sphereOrbit;
+uniform mat4 sphereTranslate;
+uniform mat4 sphereScale;
+uniform mat4 moonOrbit;
+uniform mat4 navTranslate;
+uniform mat4 navRotate;
+
+uniform mat4 finalTranslate;
+
+varying vec3 N, L, E;
+
+uniform float shininess;
+uniform bool phongShading;
+
+varying vec4 fColor;
+
+void main() 
+{
+    vec4 pos = -(finalTranslate * sphereOrbit * sphereTranslate * sphereScale * vPosition);
+	
+	vec3 light = lightPosition.xyz;
+	L = normalize( light - pos.xyz );
+	E = -pos.xyz;
+	N = normalize((modelViewMatrix*vNormal).xyz);
+	
+	if (!phongShading)
+	{
+		vec3 H = normalize(L + E);
+		vec4 ambient = ambientProduct;
+		float Kd = max(dot(L, N), 0.0);
+		vec4 diffuse = Kd * diffuseProduct;
+		float Ks = pow(max(dot(N, H), 0.0), shininess);
+		vec4 specular = Ks * specularProduct;
+		if( dot(L, N) < 0.0 )
+		{
+			specular = vec4(0.0, 0.0, 0.0, 1.0);
+		}
+		fColor = vec4((ambient + diffuse + specular).xyz, 1.0);
+	}
+
+    gl_Position = projectionMatrix * modelViewMatrix * navTranslate *
+		finalTranslate * sphereOrbit * sphereTranslate * sphereScale * vPosition;
+} 
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision highp float;
+
+uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+
+uniform vec4 lightPosition;
+uniform float shininess;
+uniform bool phongShading;
+
+varying vec4 fColor;
+varying vec3 N, L, E;
+void main()
+{
+    if (phongShading)
+	{
+		vec3 H = normalize( L + E );
+		vec4 ambient = ambientProduct;
+		
+		float Kd = max(dot(L, N), 0.0);
+		vec4 diffuse = Kd * diffuseProduct;
+		float Ks = pow(max(dot(N, H), 0.0), shininess);
+		vec4 specular = Ks * specularProduct;
+		
+		// discard the specular highlight if the light's behind the vertex
+		if( dot(L, N) < 0.0 )
+		{
+			specular = vec4(0.0, 0.0, 0.0, 1.0);
+		}
+		gl_FragColor = ambient + diffuse + specular;
+		gl_FragColor.a = 1.0;
+	}
+	else
+	{	
+	gl_FragColor = fColor;
+	} 
+}
+</script>
+
+<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="initShaders.js"></script>
+<script type="text/javascript" src="MV.js"></script>
+<script type="text/javascript" src="math.js"></script>
+<script type="text/javascript" src="HW 3.js"></script>
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+   
+
+
+</body>
+</html>
