@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang = "en">
+	<head>
+		<title>CS174A - Team #16</title>
+		<script type = "text/javascript" src = "./Stats.js"></script>
+		<script type = "text/javascript" src = "./MV.js"></script>
+		<script type = "text/javascript" src = "./texture.js"></script>
+		<script type = "text/javascript" src = "./camera.js"></script>
+		<script type = "text/javascript" src = "./models.js"></script>
+		<script type = "text/javascript" src = "./modelLoad.js"></script>
+		<script type = "text/javascript" src = "./water-version 1.js"></script>
+	</head>
+	<body onload = "start()" onkeydown = "handleKey(event)">
+		<table >
+        
+        <tr><th>
+			<canvas id = "glcanvas" width = "600" height = "600">
+				Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
+			</canvas>
+			<img id = "wall" src = "image/1.jpg" hidden = ""></img>
+			<img id = "metal" src = "image/metal-hull.jpg" hidden = ""></img>
+			<img id = "bomb" src = "image/f.jpg" hidden = ""></img>
+			<img id = "paper" src = "image/paper.jpg" hidden = ""></img>
+			<img id = "sky" src = "image/sky.jpg" hidden = ""></img>
+			<img id = "fire" src = "image/particle.gif" hidden = ""></img>
+</th>
+        <th>
+        	<p align="left" id="instruction" style="font-size:30px; color:red">
+        		Use the arrow keys to control the boat. <br />
+				Use W, A, S, D to control the camera.<br /><br />
+        		Avoid the missiles in 60 seconds!<br />
+        		Good luck, Captain!</p>
+        	
+</th>
+        </tr>
+    </table>
+		
+	</body>
+</html>
